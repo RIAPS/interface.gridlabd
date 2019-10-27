@@ -77,11 +77,12 @@ class Database(object):
         self.records = []
         
     def stop(self):
-        if self.client and self.conf.dbrop:
+        self.logger.info("stopping (drop=%s)", self.conf.dbdrop)
+        if self.client and self.conf.dbdrop:
             self.client.drop_database(self.conf.dbname)
             
     def __destroy__(self):
-        if self.client and self.conf.dbrop:
+        if self.client and self.conf.dbdrop:
             self.client.drop_database(self.conf.dbname)
             
             

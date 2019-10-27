@@ -41,8 +41,8 @@ class Agent():
         assert os.path.isfile(self.fncs)
         assert os.path.isfile(self.cfile)
         
-        signal.signal(signal.SIGTERM,self.terminate)
-        signal.signal(signal.SIGINT,self.terminate)
+        # signal.signal(signal.SIGTERM,self.terminate)
+        # signal.signal(signal.SIGINT,self.terminate)
         
         try:
             Config.setup()
@@ -161,15 +161,15 @@ class Agent():
     def stop(self):
         try: self.service.stop()
         except: pass
-        try: fncs.finalize()
-        except: pass
         try: self.broker.kill()
         except: pass
         try: self.engine.kill()
         except: pass
         try: self.dbase.stop()
-        except: pass
-        
+        except: pass        
+        try: fncs.finalize()
+        except: pass 
+               
     def subscribe(self,client,sub):
         obj,attr,unit = sub
         key = '%s.%s' % (obj,attr)

@@ -13,6 +13,10 @@ from gla.agent import Agent
 
 theAgent = None
 conf = None
+
+def termHandler(_signal,_frame):
+    global theAgent
+    theAgent.stop()
     
 ####################
 
@@ -21,6 +25,10 @@ def main(debug=True):
     parser.add_argument("path",help="path to model directory")
     parser.add_argument("name",help="base name for .glm, .gll, .yaml files")
     args = parser.parse_args()
+        
+    signal.signal(signal.SIGTERM,termHandler)
+    signal.signal(signal.SIGINT,termHandler)
+    
     global theAgent
     try:
         os.chdir(args.path)
