@@ -173,7 +173,7 @@ class GLAClient(threading.Thread):
 
 running = False
 
-def terminate():
+def terminate(_signal,_frame):
     global running
     running = False
    

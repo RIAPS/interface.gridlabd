@@ -1,7 +1,10 @@
 Installation Instructions
 ===========================
 
-The steps below serve as a guide for installing the necessary packages to run the GridLAB-D interface. It assumes that the latest version of RIAPS is already installed. For instructions on how to install RIAPS please refer to https://riaps.isis.vanderbilt.edu/rdownloads.html.
+The steps below serve as a guide for installing the necessary packages to run the GridLAB-D interface. It assumes that the latest version of RIAPS is already installed. 
+For instructions on how to install RIAPS please refer to https://riaps.isis.vanderbilt.edu/rdownloads.html.
+
+The instructions below have been tested on a Ubuntu 18.04 installation. 
 
 FNCS Installation
 ------------------
