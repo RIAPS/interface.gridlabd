@@ -22,7 +22,9 @@ To start:
 Pre-requisite: the rpyc_registry must be running so that the client(s) can connect to the agent.
 
 To start the agent (in this directory)
+```
    python3 riaps_gla.py sample APP
+```
 
 An example client is in the script test_client.py -- this is compatible with the loadshed model (in sample/APP.gml)
 
