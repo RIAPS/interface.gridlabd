@@ -95,11 +95,11 @@ class GLAClient(threading.Thread):
                         self.conn = rpyc.connect(host,port,
                                                  config = {"allow_public_attrs" : True})
                     except socket.error as e:
-                        print("%s.%s: %s" %(str(host),str(port),str(e)))
+                        self.logger.error("%s.%s: %s" %(str(host),str(port),str(e)))
                         pass
                     if self.conn: break
             except DiscoveryError:
-                self.logger.info("discovery of %s failed" % (GLAClient.SERVICENAME))
+                self.logger.error("discovery of %s failed" % (GLAClient.SERVICENAME))
                 pass
             if self.conn: break
             if self.host and self.port:
@@ -107,7 +107,7 @@ class GLAClient(threading.Thread):
                     self.conn = rpyc.connect(self.host,self.port,
                                              config = {"allow_public_attrs" : True})
                 except socket.error as e:
-                    print("%s.%s: %s" %(str(host),str(port),str(e)))
+                    self.logger.error("%s.%s: %s" %(str(host),str(port),str(e)))
                     pass
             if self.conn: break
             if retry == False:
