@@ -27,9 +27,9 @@
       [ 'qry', (ObjectName, AttributeName, Unit) ] - query the last known value of the Object.Attribute. 
     - CommandRep: The agent replies with these messages to the commands.
       'ok' - Reply for 'sub', 'pub', commands
-      (ObjectName, AttributeName, Value, Unit, TimeStamp) - Response to query, the value of the requested Object.Attribute.
+      (ObjectName, AttributeName, Value, TimeStamp) - Response to query, the value of the requested Object.Attribute.
     - Measurement: Data messages that are published by the agent (as requested by a 'sub' command)
-      (ObjectName, AttributeName, Value, Unit, TimeStamp) - The value of the selected Object.Attribute.
+      (ObjectName, AttributeName, Value, TimeStamp) - The value of the selected Object.Attribute.
 '''
 
 import time
