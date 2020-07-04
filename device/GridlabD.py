@@ -23,10 +23,10 @@
     
     - CommandReq: The client component uses these messages to control the agent.
       [ 'sub', (ObjectName, AttributeName, Unit) ] - instruct the agent to start publishing measurement data from the Object.Attribute of the model. 
-      [ 'pub', (ObjectName, AttributeName, Value, Unit)] - set the value of the selected Object.Attribute. 
+      [ 'set', (ObjectName, AttributeName, Value, Unit)] - set the value of the selected Object.Attribute. 
       [ 'qry', (ObjectName, AttributeName, Unit) ] - query the last known value of the Object.Attribute. 
     - CommandRep: The agent replies with these messages to the commands.
-      'ok' - Reply for 'sub', 'pub', commands
+      'ok' - Reply for 'sub', 'set', commands
       (ObjectName, AttributeName, Value, TimeStamp) - Response to query, the value of the requested Object.Attribute.
     - Measurement: Data messages that are published by the agent (as requested by a 'sub' command)
       (ObjectName, AttributeName, Value, TimeStamp) - The value of the selected Object.Attribute.
@@ -190,13 +190,13 @@ class GLAClient(threading.Thread):
                             if s == self.relay:
                                 msg = self.relay.recv_pyobj()
                                 # msg = ['sub', ( obj, attr, unit ) ... ] -- Subscribe   
-                                # msg = ['pub', ( obj, attr, unit ) ... ] -- Publish
+                                # msg = ['set', ( obj, attr, unit ) ... ] -- Publish
                                 # msg = ['qry', id, ( obj, attr, unit ) ... ] -- Query 
                                 self.logger.info("run: relay recv = %s" % str(msg))
                                 cmd = msg[0]
                                 if cmd == 'sub':
                                     self.subscribe(msg[1:])
-                                elif cmd == 'pub': 
+                                elif cmd == 'set': 
                                     self.publish(msg[1:])
                                 elif cmd == 'qry':
                                     self.query(msg[1],msg[2:])
@@ -299,8 +299,8 @@ class GridlabD(Component):
         if not self.running:
             self.logger.info("GLA Client not running")
             return
-        if cmd == 'pub' : 
-            # msg = [ 'pub'  , ( 'obj', 'attr', 'unit' ) ... ] -- Publish
+        if cmd == 'set' : 
+            # msg = [ 'set'  , ( 'obj', 'attr', 'unit' ) ... ] -- Publish
             self.relay.send_pyobj(msg)
             self.command.send_pyobj('ok')
         elif cmd == 'sub':
