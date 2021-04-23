@@ -267,6 +267,9 @@ class GLAClient(threading.Thread):
         self.active.set()
         self.terminated.set()
         self.logger.info('GLAClient terminating')
+        
+    def get_plug(self):
+        return self.relay
 
 class GridlabD(Component):
     def __init__(self, host='', port=0):
@@ -283,7 +286,11 @@ class GridlabD(Component):
             clientName = "GLA-%s" % str(hex(int.from_bytes(self.getActorID(),'big')))
             self.glaClient = GLAClient(self,clientName,self.host,self.port,self.relay,self.logger)
             self.glaClient.start()         # Run the thread
+            plug = None
+            while plug is None:
+                plug = self.glaClient.get_plug()
             time.sleep(0.1)
+            self.plugID = self.relay.get_plug_identity(plug)
             self.relay.activate()
             self.glaClient.activate()
             self.running = True
@@ -301,16 +308,19 @@ class GridlabD(Component):
             return
         if cmd == 'set' : 
             # msg = [ 'set'  , ( 'obj', 'attr', 'unit' ) ... ] -- Publish
+            self.relay.set_identity(self.plugID)
             self.relay.send_pyobj(msg)
             self.command.send_pyobj('ok')
         elif cmd == 'sub':
-            # msg = [ 'sub'  , ( 'obj', 'attr', 'unit' ) ... ] -- Subscribe   
+            # msg = [ 'sub'  , ( 'obj', 'attr', 'unit' ) ... ] -- Subscribe
+            self.relay.set_identity(self.plugID)   
             self.relay.send_pyobj(msg)
             self.command.send_pyobj('ok')
         elif cmd == 'qry':
             # msg = [ 'qry'  , ( 'obj', 'attr', 'unit' ) ... ] -- Query
             id = self.command.get_identity()
             qry = [cmd,id] + msg[1:]
+            self.relay.set_identity(self.plugID)
             self.relay.send_pyobj(qry)
         else:
             self.logger.error("GridlabdD.on_command: unknown command: %s" % str(msg))
